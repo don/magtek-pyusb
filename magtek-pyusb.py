@@ -44,20 +44,20 @@ endpoint = device[0][(0,0)][0]
 
 data = []
 swiped = False
-print "Please swipe your card..."
+print("Please swipe your card...")
 
 while 1:
     try:
         data += device.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize)
         if not swiped: 
-            print "Reading..."
+            print("Reading...")
         swiped = True
 
     except usb.core.USBError as e:
         if e.args == ('Operation timed out',) and swiped:
             if len(data) < DATA_SIZE:
-                print "Bad swipe, try again. (%d bytes)" % len(data)
-                print "Data: %s" % ''.join(map(chr, data))
+                print("Bad swipe, try again. (%d bytes)" % len(data))
+                print("Data: %s" % ''.join(map(chr, data)))
                 data = []
                 swiped = False
                 continue
@@ -68,19 +68,19 @@ while 1:
 
 enc_formats = ('ISO/ABA', 'AAMVA', 'CADL', 'Blank', 'Other', 'Undetermined', 'None')
 
-print "Card Encoding Type: %s" % enc_formats[data[6]]
+print("Card Encoding Type: %s" % enc_formats[data[6]])
 
-print "Track 1 Decode Status: %r" % bool(not data[0])
-print "Track 1 Data Length: %d bytes" % data[3]
-print "Track 1 Data: %s" % ''.join(map(chr, data[7:116]))
+print("Track 1 Decode Status: %r" % bool(not data[0]))
+print("Track 1 Data Length: %d bytes" % data[3])
+print("Track 1 Data: %s" % ''.join(map(chr, data[7:116])))
 
-print "Track 2 Decode Status: %r" % bool(not data[1])
-print "Track 2 Data Length: %d bytes" % data[4]
-print "Track 2 Data: %s" % ''.join(map(chr, data[117:226]))
+print("Track 2 Decode Status: %r" % bool(not data[1]))
+print("Track 2 Data Length: %d bytes" % data[4])
+print("Track 2 Data: %s" % ''.join(map(chr, data[117:226])))
 
-print "Track 3 Decode Status: %r" % bool(not data[2])
-print "Track 3 Data Length: %d bytes" % data[5]
-print "Track 3 Data: %s" % ''.join(map(chr, data[227:336]))
+print("Track 3 Decode Status: %r" % bool(not data[2]))
+print("Track 3 Data Length: %d bytes" % data[5])
+print("Track 3 Data: %s" % ''.join(map(chr, data[227:336])))
 
 # since this is a bank card we can parse out the cardholder data
 
@@ -97,6 +97,6 @@ info['first_name'] = track[j+1:k].strip()
 info['exp_year'] = track[k+1:k+3]
 info['exp_month'] = track[k+3:k+5]
 
-print "Bank card info: ", info
+print("Bank card info: ", info)
 
     
