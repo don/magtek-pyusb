@@ -12,7 +12,8 @@ import usb.core
 import usb.util
 
 VENDOR_ID = 0x0801
-PRODUCT_ID = 0x0002
+# MagTek 0x0001 is keyboard emulation, 0x0011 is HID
+PRODUCT_ID = 0x0011
 DATA_SIZE = 337
 
 # find the MagTek reader
@@ -52,6 +53,13 @@ while 1:
         if not swiped: 
             print("Reading...")
         swiped = True
+
+        print(data)
+        print(len(data))
+
+        # ELO doesn't timeout for test, if we get more than DATA_SIZE assume good scan
+        if len(data) >= DATA_SIZE:
+            break
 
     except usb.core.USBError as e:
         if e.args == ('Operation timed out',) and swiped:
